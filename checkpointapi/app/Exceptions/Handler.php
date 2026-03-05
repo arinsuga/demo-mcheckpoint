@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use App\Exceptions\GeocodingLimitExceededException;
 
 class Handler extends ExceptionHandler
 {
@@ -13,7 +14,7 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
-        //
+        GeocodingLimitExceededException::class,
     ];
 
     /**
@@ -46,6 +47,13 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if ($exception instanceof GeocodingLimitExceededException) {
+            return response()->json([
+                'status_failed' => 'GAGAL - Batas harian penggunaan lokasi telah tercapai. Silakan coba lagi besok.',
+                'message'       => $exception->getMessage(),
+            ], 429);
+        }
+
         return parent::render($request, $exception);
     }
 }

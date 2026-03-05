@@ -4,6 +4,8 @@ namespace Arins\Services\Locater;
 
 use Arins\Services\Locater\LocaterInterface;
 use Arins\Services\Locater\Locater;
+use Illuminate\Support\Facades\Cache;
+use App\Exceptions\GeocodingLimitExceededException;
 
 class Geocoding implements LocaterInterface
 {
@@ -31,6 +33,30 @@ class Geocoding implements LocaterInterface
      * ====================================================== */
     public function locate($par1 = null)
     {
+        // ======================================================
+        // Daily Rate Limit Check
+        // Enable/disable via GEOCODING_LIMITATION in .env
+        // Configurable limit via GEOCODING_DAILY_LIMIT in .env
+        // ====================================================== */
+        $isLimitationEnabled = filter_var(env('GEOCODING_LIMITATION', false), FILTER_VALIDATE_BOOLEAN);
+
+        if ($isLimitationEnabled) {
+
+            $today    = now()->format('Y-m-d');
+            $cacheKey = 'geocoding_calls_' . $today;
+            $limit    = (int) env('GEOCODING_DAILY_LIMIT', 200);
+
+            $count = Cache::get($cacheKey, 0);
+
+            if ($count >= $limit) {
+                throw new GeocodingLimitExceededException();
+            }
+
+            Cache::put($cacheKey, $count + 1, now()->endOfDay());
+
+        } //end if
+        // ======================================================
+
         $host = $par1;
 
         //fetch api/webservices

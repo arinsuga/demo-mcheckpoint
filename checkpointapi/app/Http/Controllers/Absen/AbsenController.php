@@ -633,7 +633,6 @@ class AbsenController extends Controller
         $host = $this->getFullURL($latitude, $longitude);
         $data = $this->oLocater->locate($host);
 
-
         //convert to JSON
         if ( ($data) && ($data->results) ) {
 

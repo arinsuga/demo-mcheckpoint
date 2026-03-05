@@ -109,10 +109,10 @@ useEffect(() => {
           message: '',
           description: '',
           type: 'default',
-          duration: 1500,
+          duration: 10000,
           floating: true,
           icon: 'danger',
-          backgroundColor: Colors.grey,
+          backgroundColor: Colors.orange,
           color: Colors.white,
       };
       let messageOption: MessageOptions = { ...messageOptionSuccess };
@@ -169,7 +169,17 @@ useEffect(() => {
 
           }
           
-          if (result.status == 500) {
+          // if (result.status == 500) {
+
+          //     messageOption = {
+          //       ...messageOptionFailed,
+          //       message: `ERROR: ${result.status}`,
+          //       description: result.data.message,
+          //     };
+            
+          // }
+
+          if (result.status != 200) {
 
               messageOption = {
                 ...messageOptionFailed,

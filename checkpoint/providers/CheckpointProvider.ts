@@ -32,7 +32,6 @@ export const check = async (username: string): Promise<any> => {
         'Accept': 'application/json',
         'Content-Type': 'application/json',},
     });
-    console.log('check by email');
 
     if (!response.data) return '';
   
@@ -113,9 +112,12 @@ export const checkin = async (checkinData: ICheckpoint): Promise<any> => {
         };
       });
 
-    if (errorData) return errorData;
+    if (errorData) {
 
-    // console.log(response.data);  
+      return errorData;
+
+    }
+
       console.log('Checkin SUCCESS mas bro...');  
 
     return response;

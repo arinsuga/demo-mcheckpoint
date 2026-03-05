@@ -23,6 +23,9 @@ export const FieldUserName = ({onChangeText}: FieldUserNameProps) => {
             placeholder="Username"
             style={ styles.textInput }
             onChangeText={ (nextText) => onChangeText(nextText) }
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoCorrect={false}
           ></TextInput>
 
         </View>
